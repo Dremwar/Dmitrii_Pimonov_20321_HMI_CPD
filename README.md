@@ -239,6 +239,7 @@ if __name__ == "__main__":
     app = App()
     app.mainloop()
 '''
+
 Скриншот1:
 ![image](https://github.com/Dremwar/Dremwar_HMI/assets/96596871/6478e9d6-e851-4cf0-88cc-188339905d5b)
 Скриншот2:
