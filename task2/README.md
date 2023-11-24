@@ -241,9 +241,12 @@ if __name__ == "__main__":
 ```
 
 Скриншот1:
+
 ![image](https://github.com/Dremwar/Dremwar_HMI/assets/96596871/6478e9d6-e851-4cf0-88cc-188339905d5b)
+
 Скриншот2:
 ![image](https://github.com/Dremwar/Dremwar_HMI/assets/96596871/a5b530de-17ab-4135-a443-a71d269f12d1)
+
 Скриншот3:
 ![image](https://github.com/Dremwar/Dremwar_HMI/assets/96596871/71874c6b-54cb-4c33-8f25-9b2ed2a8e4ff)
 
