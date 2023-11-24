@@ -31,7 +31,7 @@
    - Информирование пользователя о потенциально опасных действиях (например, предупреждение при попытке завершить какой-либо процесс (напр. важный системный процесс))
 
 Листинг:
-'''Py
+```Py
 import tkinter as tk #Импортируем библеотеки
 from tkinter import *
 from tkinter import ttk
@@ -238,7 +238,7 @@ class App(tk.Tk): #Инициализируем основной Класс
 if __name__ == "__main__":
     app = App()
     app.mainloop()
-'''
+```
 
 Скриншот1:
 ![image](https://github.com/Dremwar/Dremwar_HMI/assets/96596871/6478e9d6-e851-4cf0-88cc-188339905d5b)
