@@ -142,6 +142,7 @@ while True:
     
 # Листинг 3.3:
 Сервер(server3.2)
+
 ```Py
 import protolc_pb2 as pb
 import socket
@@ -162,6 +163,7 @@ while True:
 
 conn.close()
 ```
+
 Клиент(client3.2)
 
 ```Py
