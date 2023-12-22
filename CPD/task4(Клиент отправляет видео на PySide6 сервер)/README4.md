@@ -71,6 +71,7 @@ if __name__ == "__main__":
 import socket
 import cv2
 
+#Функция отправки видео на сервер
 def send_video(video_path, server_address, server_port):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((server_address, server_port))
