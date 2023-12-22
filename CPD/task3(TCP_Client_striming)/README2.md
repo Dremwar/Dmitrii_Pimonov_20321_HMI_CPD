@@ -199,4 +199,8 @@ while True:
 
 sock.close()
 ```
+Скриншот5(Результат работы программы):
+
+![image](https://github.com/Dremwar/Dmitrii_Pimonov_20321_HMI_CPD/assets/96596871/07bb4bcc-deb4-4aeb-ba64-689998653a6d)
+
 
