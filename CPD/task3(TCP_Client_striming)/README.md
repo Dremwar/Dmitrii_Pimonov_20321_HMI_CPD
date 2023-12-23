@@ -1,4 +1,4 @@
-# Dremwar_HMI
+# Dremwar_CPD
 Задание: TCP Client-streaming (Клиент, например, раз в 1 секунду отправляет данные на сервер), используя встроенный в Python модуль socket.
 
 Task_3_1_server.py Task_3_1_client.py Используя encode() и decode()
