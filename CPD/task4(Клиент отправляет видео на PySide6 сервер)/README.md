@@ -2,7 +2,7 @@
 Задание: Task_4 Клиент отправляет видео на PySide6 сервер, где проиходит отображение этого видео в виджете.
 
 # Описание программы 4:
-В этих двух программах сервира и клиента я реализовал отправку видео на сервер PySide6 и его воспроизведения.
+В этих двух программах сервира и клиента я реализовал отправку видео на сервер PySide6 с помошью socket и его воспроизведения.
 
 # Листинг 4:
 Сервер(server_mp4.py)
@@ -81,23 +81,28 @@ if __name__ == "__main__":
 import socket
 import cv2
 
-#Функция отправки видео на сервер
+#Функция отправки видио
 def send_video(video_path, server_address, server_port):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((server_address, server_port))
 
+    #Объект с видеом
     video_capture = cv2.VideoCapture(video_path)
     while True:
+        #чтение кадров из видео
         ret, frame = video_capture.read()
         if not ret:
             break
 
+        #Кодирование кадров
         frame_data = cv2.imencode(".jpg", frame)[1].tobytes()
         frame_size_data = len(frame_data).to_bytes(4, "big")
 
+        #Отправка кадров на сервер
         client_socket.sendall(frame_size_data)
         client_socket.sendall(frame_data)
 
+    #Завершение видио
     client_socket.sendall((0).to_bytes(4, "big"))
     client_socket.close()
     print("Video sent!")
