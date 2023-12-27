@@ -17,6 +17,7 @@ import numpy as np
 
 #Функция создания сервера и отображения подключения клиента
 def show_video_in_widget(video_widget):
+    # создаём сокет с использованием TCP/IP протокола
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind(("127.0.0.1", 12345))
     server_socket.listen()
@@ -30,11 +31,16 @@ def show_video_in_widget(video_widget):
         frame = receive_frame(client_socket)
         if frame is None:
             break
+        #Преобразуем цветовую палитру в RGB
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         height, width,_ = image.shape
+        #Создаём объект с данными изображения
         q_image = QImage(image.data, width, height, image.strides[0], QImage.Format_RGB888)
+        #Создаём объект qpixmap
         pix_map = QPixmap.fromImage(q_image)
+        #Маштабирование объекта qpixmap
         pix_map = pix_map.scaled(video_widget.size(), Qt.AspectRatioMode.KeepAspectRatio)
+
         video_widget.setPixmap(pix_map)
         QApplication.processEvents()
 
@@ -42,16 +48,20 @@ def show_video_in_widget(video_widget):
     client_socket.close()
     server_socket.close()
     print("Server closed!")
-
+#Функция кадра изображения
 def receive_frame(client_socket):
+    #Строка для хранения размера кадра
     frame_size_data = b""
     while len(frame_size_data) < 4:
+        #Добаление данных от клиенкт
         frame_size_data += client_socket.recv(4 - len(frame_size_data))
     frame_size = int.from_bytes(frame_size_data, "big")
     if frame_size == 0:
         return None
+    #Хранение данных кадра
     frame_data = b""
     while len(frame_data) < frame_size:
+        #Добавление данных от клиента
         frame_data += client_socket.recv(frame_size - len(frame_data))
     frame = cv2.imdecode(np.frombuffer(frame_data, np.uint8), cv2.IMREAD_COLOR)
     return frame
