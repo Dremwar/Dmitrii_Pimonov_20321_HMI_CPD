@@ -1,44 +1,41 @@
 use std::io;
-fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &Vec<i32>, n: i32) {
-    let (mut i, mut j, mut k) = (m - 1, n - 1, (m + n - 1) as usize);
-    
-    while i >= 0 && j >= 0 {
-        if nums1[i as usize] > nums2[j as usize] {
-            nums1[k] = nums1[i as usize];
-            i -= 1;
-        } else {
-            nums1[k] = nums2[j as usize];
-            j -= 1;
-        }
-        k -= 1;
-    }
-    
-    while j >= 0 {
-        nums1[k] = nums2[j as usize];
-        k -= 1;
-        j -= 1;
-    }
-}
-
+use std::io::BufRead;
 fn main() {
-    
-    let mut nums1 = String::new();
-    io::stdin().read_line(&mut nums1)
-        .expect("Не удалось прочитать строку");
-    let mut nums1: Vec<i32> = nums1.trim()
+
+    let stdin = io::stdin();
+    let input = stdin.lock().lines().next().unwrap().unwrap();
+    let mut nums1: Vec<i32> = input
         .split_whitespace()
-        .map(|num| num.parse().expect("Введите корректное число"))
+        .map(|x| x.parse().unwrap())
         .collect();
 
+    let mut input1 = String::new();
+    io::stdin().read_line(&mut input1)
+        .expect("Не удалось прочитать строку");
+
+    let m: usize = input1.trim().parse()
+        .expect("Введено некорректное число");
+
+    nums1.truncate(m);
     
-    let length = nums1.len();
-    println!("{:#?}", length);
-    let m = 3;
-    let nums2 = vec![2, 5, 6];
-    let n = 3;
-    
-    merge(&mut nums1, m, &nums2, n);
-    
+    let stdin = io::stdin();
+    let input = stdin.lock().lines().next().unwrap().unwrap();
+    let mut nums2: Vec<i32> = input
+        .split_whitespace()
+        .map(|x| x.parse().unwrap())
+        .collect();
+
+    let mut input2 = String::new();
+    io::stdin().read_line(&mut input2)
+        .expect("Не удалось прочитать строку");
+
+    let n: usize = input2.trim().parse()
+        .expect("Введено некорректное число");
+
+    nums2.truncate(n);
+
+    nums1.append(&mut nums2);
+    nums1.sort();
     println!("{:?}", nums1);
 }
 
