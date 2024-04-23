@@ -8,6 +8,7 @@
 
 # Листинг Length of Last Word:
 ```rs
+Программа в leetcode
 impl Solution {
     pub fn length_of_last_word(s: String) -> i32 {
         let last_word_length = match s.split_whitespace().last() {
@@ -17,10 +18,10 @@ impl Solution {
         return(last_word_length as i32) 
     }
 }
-Клиент(client3.1)
 ```
 
 ```rs
+программа в visual studio
 use std::io;
 fn main() {
     let mut guess = String::new();
