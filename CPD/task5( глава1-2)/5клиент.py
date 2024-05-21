@@ -17,5 +17,7 @@ def run():
     print("add product: response", response)
     productInfo = stub.getProduct(product_info_pb2.ProductID(value = response.value))
     print("get product: response", productInfo)
+    dell=stub.add_ProductInfoServicer_to_server(ProductInfoServicer(), server)
+    print("delete product: response",dell)
 
 run()

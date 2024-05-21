@@ -30,6 +30,19 @@ class ProductInfoServicer(product_info_pb2_grpc.ProductInfoServicer):
         print("getProduct:response", response)
         return response
 
+    def deleteProduct(self, request, context):
+        print("deleteProduct:request", request)
+        id = request.value
+        if str(id) in self.productMap:
+            del self.productMap[str(id)]
+            response = product_info_pb2.Empty()
+            print("deleteProduct:response", response)
+            return response
+        else:
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("Product not found")
+            return product_info_pb2.Empty()
+
 #Создаём GRPC сервер
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
