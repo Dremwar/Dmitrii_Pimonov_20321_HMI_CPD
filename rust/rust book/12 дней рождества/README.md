@@ -1,72 +1,41 @@
 # Dremwar_CPD
-Задание: Container With Most Water (Вам задан целочисленный массив height длиной n. Проведено n вертикальных линий таким образом, что две конечные точки i-й строки равны (i, 0) и (i, высота[i]).
-Найдите две линии, которые вместе с осью x образуют контейнер, таким образом, чтобы в контейнере было больше всего воды.
-Укажите максимальное количество воды, которое может вместиться в контейнер.
-Обратите внимание, что вы не можете наклонять контейнер.)
+Задание: 12 дней рождества (Распечатайте текст рождественской песни "Двенадцать дней Рождества", воспользовавшись повторами в песне.) 
 
 
-# Описание программы Container With Most Water:
-Данная прога принимает строку из высот барикад контейнера и рассчитывает максимальное количество воды помещёное в контейнер и выводит его.
+# Описание программы 12 дней рождества:
+Данная программа выводит в консоль английскую песню 12 дней рождества.
 
 
-# Листинг Container With Most Water:
+# Листинг 12 дней рождества:
 ```rs
-Программа в leetcode
-impl Solution {
-    pub fn max_area(height: Vec<i32>) -> i32 {
-            let mut max_area = 0;
-            let mut left = 0;
-            let mut right = height.len() - 1;
-            
-            while left < right {
-                let h = height[left].min(height[right]);
-                let w = (right - left) as i32;
-                max_area = max_area.max(h * w);
-                
-                if height[left] < height[right] {
-                    left += 1;
-                } else {
-                    right -= 1;
-                }
-            }
-            max_area   
-            
-        }
-}
-```
-
-```rs
-программа в visual studio
-use std::io;
-use std::io::BufRead;
-fn max_area(height: Vec<i32>) -> i32 {
-    let mut max_area = 0;
-    let mut left = 0;
-    let mut right = height.len() - 1;
-    
-    while left < right {
-        let h = height[left].min(height[right]);
-        let w = (right - left) as i32;
-        max_area = max_area.max(h * w);
-        
-        if height[left] < height[right] {
-            left += 1;
-        } else {
-            right -= 1;
-        }
-    }
-    
-    max_area
-}
-
 fn main() {
-    let stdin = io::stdin();
-    let input = stdin.lock().lines().next().unwrap().unwrap();
-    let mut height: Vec<i32> = input
-        .split_whitespace()
-        .map(|x| x.parse().unwrap())
-        .collect();
-    println!("Максимальная площадь контейнера: {}", max_area(height));
+    let days = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"];
+    let gifts = [
+        "a partridge in a pear tree",
+        "Two turtle doves",
+        "Three French hens",
+        "Four calling birds",
+        "Five golden rings",
+        "Six geese a-laying",
+        "Seven swans a-swimming",
+        "Eight maids a-milking",
+        "Nine ladies dancing",
+        "Ten lords a-leaping",
+        "Eleven pipers piping",
+        "Twelve drummers drumming",
+    ];
+
+    for i in 0..12 {
+        println!("On the {} day of Christmas, my true love gave to me:", days[i]);
+        for j in (0..=i).rev() {
+            if j == 0 && i != 0 {
+                println!("And {}", gifts[j]);
+            } else {
+                println!("{}", gifts[j]);
+            }
+        }
+        println!();
+    }
 }
 ```
 

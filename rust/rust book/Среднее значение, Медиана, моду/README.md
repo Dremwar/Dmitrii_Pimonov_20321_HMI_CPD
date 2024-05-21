@@ -1,72 +1,59 @@
 # Dremwar_CPD
-Задание: Container With Most Water (Вам задан целочисленный массив height длиной n. Проведено n вертикальных линий таким образом, что две конечные точки i-й строки равны (i, 0) и (i, высота[i]).
-Найдите две линии, которые вместе с осью x образуют контейнер, таким образом, чтобы в контейнере было больше всего воды.
-Укажите максимальное количество воды, которое может вместиться в контейнер.
-Обратите внимание, что вы не можете наклонять контейнер.)
+Задание: Среднее, медиана,мода (Есть список целых чисел. Создайте функцию, используйте вектор и верните из списка: среднее значение; медиану (значение элемента из середины списка после его сортировки); моду списка (mode of list, то значение которое встречается в списке наибольшее количество раз; HashMap будет полезна в данном случае).)
 
 
-# Описание программы Container With Most Water:
-Данная прога принимает строку из высот барикад контейнера и рассчитывает максимальное количество воды помещёное в контейнер и выводит его.
+# Описание программы Среднее, медиана,мода:
+Данная программа принимает список целых чисел, и выводит среднее значение этого списка, медиану и его моду.
 
 
-# Листинг Container With Most Water:
+# Листинг Среднее, медиана,мода:
 ```rs
-Программа в leetcode
-impl Solution {
-    pub fn max_area(height: Vec<i32>) -> i32 {
-            let mut max_area = 0;
-            let mut left = 0;
-            let mut right = height.len() - 1;
-            
-            while left < right {
-                let h = height[left].min(height[right]);
-                let w = (right - left) as i32;
-                max_area = max_area.max(h * w);
-                
-                if height[left] < height[right] {
-                    left += 1;
-                } else {
-                    right -= 1;
-                }
-            }
-            max_area   
-            
-        }
-}
-```
-
-```rs
-программа в visual studio
+use std::collections::HashMap; //Импорт необходимых библиотек: HashMap, io и BufRead
 use std::io;
 use std::io::BufRead;
-fn max_area(height: Vec<i32>) -> i32 {
-    let mut max_area = 0;
-    let mut left = 0;
-    let mut right = height.len() - 1;
+
+fn calculate_stats(numbers: Vec<i32>) -> (i32, i32, i32) {//Определение функции calculate_stats, которая принимает вектор  i32 и возвращает кортеж  i32.
+    let mut sorted_numbers = numbers.clone();//Создание копии вектора и сортируем его (для подсчета медианы).
+    sorted_numbers.sort();
+
+    let mean = numbers.iter().sum::<i32>() / numbers.len() as i32;//Вычисление среднего значения
     
-    while left < right {
-        let h = height[left].min(height[right]);
-        let w = (right - left) as i32;
-        max_area = max_area.max(h * w);
-        
-        if height[left] < height[right] {
-            left += 1;
-        } else {
-            right -= 1;
+    let median = if numbers.len() % 2 == 0 { //Определение медианы
+        let mid = numbers.len() / 2;
+        (sorted_numbers[mid - 1] + sorted_numbers[mid]) / 2
+    } else {
+        sorted_numbers[numbers.len() / 2]
+    };
+
+    let mut freq_map = HashMap::new();//считаем моду
+    for &num in &numbers {
+        *freq_map.entry(num).or_insert(0) += 1;
+    }
+
+    let mut mode = 0;//выводим моду
+    let mut max_freq = 0;
+    for (&num, &freq) in &freq_map {
+        if freq > max_freq {
+            max_freq = freq;
+            mode = num;
         }
     }
-    
-    max_area
+
+    (mean, median, mode)
 }
 
-fn main() {
-    let stdin = io::stdin();
+fn main() { //создаём функцию которая будет принимать значения вводимые пользователем и отправлять их на обработку
+    let stdin = io::stdin(); 
     let input = stdin.lock().lines().next().unwrap().unwrap();
-    let mut height: Vec<i32> = input
+    let numbers: Vec<i32> = input
         .split_whitespace()
         .map(|x| x.parse().unwrap())
         .collect();
-    println!("Максимальная площадь контейнера: {}", max_area(height));
+    let (mean, median, mode) = calculate_stats(numbers);
+
+    println!("Average: {}", mean);//Выводим результаты
+    println!("Median: {}", median);
+    println!("Mode: {}", mode);
 }
 ```
 
