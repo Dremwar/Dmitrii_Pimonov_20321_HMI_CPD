@@ -1,4 +1,4 @@
-#Импортируем библиотеки
+#Импортируем необходимые библиотеки: futures, uuid, grpc и time.
 from concurrent import futures
 import uuid
 import grpc
@@ -8,10 +8,12 @@ import time
 import product_info_pb2
 import product_info_pb2_grpc
 
+#Создаём класс, который будет содержать методы для добавления, получения и удаления продуктов
 class ProductInfoServicer(product_info_pb2_grpc.ProductInfoServicer):
     def __init__(self):
         self.productMap = {}
-    #Функция Получения данных
+
+    #В методе addProduct мы создаем уникальный идентификатор для продукта, сохраняем его в словаре productMap и возвращаем идентификатор
     def addProduct(self, request, context):
         id = uuid.uuid1()
         request.id = str(id)
@@ -22,7 +24,7 @@ class ProductInfoServicer(product_info_pb2_grpc.ProductInfoServicer):
         print("addProduct:response", response)
         return response
 
-    #Функция отправки данных
+    #В методе getProduct получаем идентификатор продукта и возвращаем соответствующую информацию о продукте
     def getProduct(self, request, context):
         print("getProduct:request", request)
         id = request.value
@@ -30,6 +32,7 @@ class ProductInfoServicer(product_info_pb2_grpc.ProductInfoServicer):
         print("getProduct:response", response)
         return response
 
+    #В методе deleteProduct удаляем продукт из словаря productMap
     def deleteProduct(self, request, context):
         print("deleteProduct:request", request)
         id = request.value
