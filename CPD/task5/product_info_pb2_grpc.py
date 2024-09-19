@@ -51,8 +51,8 @@ class ProductInfoStub(object):
                 _registered_method=True)
         self.deleteProduct = channel.unary_unary(
                 '/ecommerce.ProductInfo/deleteProduct',
-                request_serializer=product__info__pb2.Product.SerializeToString,
-                response_deserializer=product__info__pb2.dell.FromString,
+                request_serializer=product__info__pb2.ProductID.SerializeToString,
+                response_deserializer=product__info__pb2.DeleteResponse.FromString,
                 _registered_method=True)
 
 
@@ -92,8 +92,8 @@ def add_ProductInfoServicer_to_server(servicer, server):
             ),
             'deleteProduct': grpc.unary_unary_rpc_method_handler(
                     servicer.deleteProduct,
-                    request_deserializer=product__info__pb2.Product.FromString,
-                    response_serializer=product__info__pb2.dell.SerializeToString,
+                    request_deserializer=product__info__pb2.ProductID.FromString,
+                    response_serializer=product__info__pb2.DeleteResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -175,8 +175,8 @@ class ProductInfo(object):
             request,
             target,
             '/ecommerce.ProductInfo/deleteProduct',
-            product__info__pb2.Product.SerializeToString,
-            product__info__pb2.dell.FromString,
+            product__info__pb2.ProductID.SerializeToString,
+            product__info__pb2.DeleteResponse.FromString,
             options,
             channel_credentials,
             insecure,

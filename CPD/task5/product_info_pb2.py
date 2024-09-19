@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12product_info.proto\x12\tecommerce\"G\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05price\x18\x04 \x01(\x02\"\x1a\n\tProductID\x12\r\n\x05value\x18\x01 \x01(\t\" \n\x04\x64\x65ll\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t2\xb3\x01\n\x0bProductInfo\x12\x36\n\naddProduct\x12\x12.ecommerce.Product\x1a\x14.ecommerce.ProductID\x12\x36\n\ngetProduct\x12\x14.ecommerce.ProductID\x1a\x12.ecommerce.Product\x12\x34\n\rdeleteProduct\x12\x12.ecommerce.Product\x1a\x0f.ecommerce.dellb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12product_info.proto\x12\tecommerce\"G\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05price\x18\x04 \x01(\x02\"\x1a\n\tProductID\x12\r\n\x05value\x18\x01 \x01(\t\"2\n\x0e\x44\x65leteResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\xbf\x01\n\x0bProductInfo\x12\x36\n\naddProduct\x12\x12.ecommerce.Product\x1a\x14.ecommerce.ProductID\x12\x36\n\ngetProduct\x12\x14.ecommerce.ProductID\x1a\x12.ecommerce.Product\x12@\n\rdeleteProduct\x12\x14.ecommerce.ProductID\x1a\x19.ecommerce.DeleteResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -25,8 +25,8 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_PRODUCT']._serialized_end=104
   _globals['_PRODUCTID']._serialized_start=106
   _globals['_PRODUCTID']._serialized_end=132
-  _globals['_DELL']._serialized_start=134
-  _globals['_DELL']._serialized_end=166
-  _globals['_PRODUCTINFO']._serialized_start=169
-  _globals['_PRODUCTINFO']._serialized_end=348
+  _globals['_DELETERESPONSE']._serialized_start=134
+  _globals['_DELETERESPONSE']._serialized_end=184
+  _globals['_PRODUCTINFO']._serialized_start=187
+  _globals['_PRODUCTINFO']._serialized_end=378
 # @@protoc_insertion_point(module_scope)
