@@ -160,9 +160,7 @@ def generate_orders_for_processing(): # Функция для генерации
 
 run() #Запуск программы
 ```
-Скриншот1(Результат работы п):
 
-![alt text](image.png)
 
 
 
