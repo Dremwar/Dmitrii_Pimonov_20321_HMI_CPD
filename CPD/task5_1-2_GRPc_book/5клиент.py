@@ -1,17 +1,23 @@
-import requests
-import sys
+#Импортируем библиотеки
+import grpc
 
-def upload_video(video_path):
-    url = 'http://127.0.0.1:5000/upload'
-    with open(video_path, 'rb') as f:
-        files = {'file': f}
-        response = requests.post(url, files=files)
-    print(response.text)
+#Загрузка сгенерированныъ файлов
+import product_info_pb2
+import product_info_pb2_grpc
 
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Использование: python client.py <path_to_video>")
-        sys.exit(1)
+#Функция отправки сообщений от клиента
+def run():
+    # Откроем gRPC канал
+    channel = grpc.insecure_channel('localhost:50051')
+    # Создание Клиента
+    stub = product_info_pb2_grpc.ProductInfoStub(channel)
 
-    video_path = sys.argv[1]
-    upload_video(video_path)
+    #Название и описание продукта
+    response = stub.addProduct(product_info_pb2.Product(name = "Apple iPhone 11", description = "Meet Apple iPhone 11. All-new dual-camera system with Ultra Wide and Night mode.", price = 699.0 ))
+    print("add product: response", response)
+    productInfo = stub.getProduct(product_info_pb2.ProductID(value = response.value))
+    print("get product: response", productInfo)
+    dell=stub.add_ProductInfoServicer_to_server(ProductInfoServicer(), server)
+    print("delete product: response",dell)
+
+run()
