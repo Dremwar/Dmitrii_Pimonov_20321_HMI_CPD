@@ -9,15 +9,15 @@ class VideoWidget(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Video Upload and Display")
+        self.setWindowTitle("Видео загружено и воспроизведено")
         self.setGeometry(100, 100, 800, 600)
 
         layout = QVBoxLayout()
 
-        self.label = QLabel("Upload a video")
+        self.label = QLabel("Загрузите видио")
         layout.addWidget(self.label)
 
-        self.upload_button = QPushButton("Upload Video")
+        self.upload_button = QPushButton("Видио загружено")
         self.upload_button.clicked.connect(self.upload_video)
         layout.addWidget(self.upload_button)
 
