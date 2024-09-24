@@ -89,4 +89,5 @@ if __name__ == '__main__':
     sys.exit(app.exec())
 
 ```
+![image](https://github.com/user-attachments/assets/6c5c8ddd-26e1-45f1-aea9-a6e93fce6f3d)
 
