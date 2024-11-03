@@ -40,19 +40,19 @@ class ProductInfoStub(object):
             channel: A grpc.Channel.
         """
         self.addProduct = channel.unary_unary(
-                '/ecommerce.ProductInfo/addProduct',
+                '/product_info.ProductInfo/addProduct',
                 request_serializer=product__info__pb2.Product.SerializeToString,
                 response_deserializer=product__info__pb2.ProductID.FromString,
                 _registered_method=True)
         self.getProduct = channel.unary_unary(
-                '/ecommerce.ProductInfo/getProduct',
+                '/product_info.ProductInfo/getProduct',
                 request_serializer=product__info__pb2.ProductID.SerializeToString,
                 response_deserializer=product__info__pb2.Product.FromString,
                 _registered_method=True)
         self.deleteProduct = channel.unary_unary(
-                '/ecommerce.ProductInfo/deleteProduct',
+                '/product_info.ProductInfo/deleteProduct',
                 request_serializer=product__info__pb2.ProductID.SerializeToString,
-                response_deserializer=product__info__pb2.DeleteResponse.FromString,
+                response_deserializer=product__info__pb2.Empty.FromString,
                 _registered_method=True)
 
 
@@ -72,7 +72,8 @@ class ProductInfoServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def deleteProduct(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Используем Empty как возвращаемое значение
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -93,13 +94,13 @@ def add_ProductInfoServicer_to_server(servicer, server):
             'deleteProduct': grpc.unary_unary_rpc_method_handler(
                     servicer.deleteProduct,
                     request_deserializer=product__info__pb2.ProductID.FromString,
-                    response_serializer=product__info__pb2.DeleteResponse.SerializeToString,
+                    response_serializer=product__info__pb2.Empty.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'ecommerce.ProductInfo', rpc_method_handlers)
+            'product_info.ProductInfo', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('ecommerce.ProductInfo', rpc_method_handlers)
+    server.add_registered_method_handlers('product_info.ProductInfo', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
@@ -120,7 +121,7 @@ class ProductInfo(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/ecommerce.ProductInfo/addProduct',
+            '/product_info.ProductInfo/addProduct',
             product__info__pb2.Product.SerializeToString,
             product__info__pb2.ProductID.FromString,
             options,
@@ -147,7 +148,7 @@ class ProductInfo(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/ecommerce.ProductInfo/getProduct',
+            '/product_info.ProductInfo/getProduct',
             product__info__pb2.ProductID.SerializeToString,
             product__info__pb2.Product.FromString,
             options,
@@ -174,9 +175,9 @@ class ProductInfo(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/ecommerce.ProductInfo/deleteProduct',
+            '/product_info.ProductInfo/deleteProduct',
             product__info__pb2.ProductID.SerializeToString,
-            product__info__pb2.DeleteResponse.FromString,
+            product__info__pb2.Empty.FromString,
             options,
             channel_credentials,
             insecure,

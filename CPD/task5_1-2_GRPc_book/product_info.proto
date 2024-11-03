@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package ecommerce;
+package product_info;
 
 service ProductInfo {
     rpc addProduct(Product) returns (ProductID);
     rpc getProduct(ProductID) returns (Product);
-    rpc deleteProduct(ProductID) returns (DeleteResponse);
+    rpc deleteProduct(ProductID) returns (Empty);  // Используем Empty как возвращаемое значение
 }
 
 message Product {
@@ -18,7 +18,6 @@ message Product {
 message ProductID {
     string value = 1;
 }
-message DeleteResponse {
-    bool success = 1;
-    string message = 2;
-}
+
+// Определение пустого сообщения Empty
+message Empty {}

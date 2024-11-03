@@ -14,19 +14,19 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12product_info.proto\x12\tecommerce\"G\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05price\x18\x04 \x01(\x02\"\x1a\n\tProductID\x12\r\n\x05value\x18\x01 \x01(\t\"2\n\x0e\x44\x65leteResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\xbf\x01\n\x0bProductInfo\x12\x36\n\naddProduct\x12\x12.ecommerce.Product\x1a\x14.ecommerce.ProductID\x12\x36\n\ngetProduct\x12\x14.ecommerce.ProductID\x1a\x12.ecommerce.Product\x12@\n\rdeleteProduct\x12\x14.ecommerce.ProductID\x1a\x19.ecommerce.DeleteResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12product_info.proto\x12\x0cproduct_info\"G\n\x07Product\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\r\n\x05price\x18\x04 \x01(\x02\"\x1a\n\tProductID\x12\r\n\x05value\x18\x01 \x01(\t\"\x07\n\x05\x45mpty2\xc8\x01\n\x0bProductInfo\x12<\n\naddProduct\x12\x15.product_info.Product\x1a\x17.product_info.ProductID\x12<\n\ngetProduct\x12\x17.product_info.ProductID\x1a\x15.product_info.Product\x12=\n\rdeleteProduct\x12\x17.product_info.ProductID\x1a\x13.product_info.Emptyb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'product_info_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_PRODUCT']._serialized_start=33
-  _globals['_PRODUCT']._serialized_end=104
-  _globals['_PRODUCTID']._serialized_start=106
-  _globals['_PRODUCTID']._serialized_end=132
-  _globals['_DELETERESPONSE']._serialized_start=134
-  _globals['_DELETERESPONSE']._serialized_end=184
-  _globals['_PRODUCTINFO']._serialized_start=187
-  _globals['_PRODUCTINFO']._serialized_end=378
+  _globals['_PRODUCT']._serialized_start=36
+  _globals['_PRODUCT']._serialized_end=107
+  _globals['_PRODUCTID']._serialized_start=109
+  _globals['_PRODUCTID']._serialized_end=135
+  _globals['_EMPTY']._serialized_start=137
+  _globals['_EMPTY']._serialized_end=144
+  _globals['_PRODUCTINFO']._serialized_start=147
+  _globals['_PRODUCTINFO']._serialized_end=347
 # @@protoc_insertion_point(module_scope)
