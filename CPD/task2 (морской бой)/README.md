@@ -46,9 +46,9 @@
 # Листинг:
 
 ```Py
-from random import randint, choice
+from random import randint, choice #Импортируем библиотеки
 
-class Ship:
+class Ship: #Класс описывает поведение отдельного корабля
     def __init__(self, length: int, tp=1, x=None, y=None) -> None:
         self._length = length  # Длина корабля
         self._tp = tp  # Направление: 1 - горизонтально, 2 - вертикально
@@ -57,11 +57,11 @@ class Ship:
         self._is_move = True  # Может ли корабль двигаться
         self._cells = [1] * length  # Состояние ячеек корабля: 1 - здоров, 2 - повреждён
 
-    def set_start_coords(self, x: int, y: int):
+    def set_start_coords(self, x: int, y: int): #Начальные кординаты корабля
         self._x = x
         self._y = y
 
-    def get_start_coords(self) -> tuple:
+    def get_start_coords(self) -> tuple: #Текущие положение корабля
         return self._x, self._y
 
     def move(self, go: int):#Движение корабля по полю: go - на сколько клеток сдвигаться
@@ -79,7 +79,7 @@ class Ship:
         ship_zone = self.get_z(ship._x, ship._y, ship._tp, ship._length, 10)
         self_zone = self.get_self_zone(self._x, self._y, self._tp, self._length)
 
-        for coord in self_zone:
+        for coord in self_zone: #Сравнивает зоны кораблей и проверяет их на пересечения
             if coord in ship_zone:
                 return True
         return False
@@ -92,24 +92,24 @@ class Ship:
 
     def get_z(self, x: int, y: int, tp: int, length: int, size: int) -> list:#Зона вокруг корабля для проверки столкновений
         zone = []
-        if tp == 1:
+        if tp == 1:# Горизонтальный корабль
             zone = [[i, j] for i in range(x - 1, x + length + 1) if 0 <= i < size for j in range(y - 1, y + 2) if 0 <= j < size]
-        elif tp == 2:
+        elif tp == 2:# Вертикальный корабль
             zone = [[i, j] for i in range(x - 1, x + 2) if 0 <= i < size for j in range(y - 1, y + length + 1) if 0 <= j < size]
         return zone
 
     def get_self_zone(self, x: int, y: int, tp=None, length=None) -> list: #Зона, занимаемая самим кораблем
-        if tp == 1:
+        if tp == 1:# Горизонтальный корабль
             return [[i, y] for i in range(x, x + length)]
-        else:
+        else:# Вертикальный корабль
             return [[x, i] for i in range(y, y + length)]
 
     def make_position(self) -> dict:#Создание позиции корабля на поле
         position = {}
-        if self._tp == 1:
+        if self._tp == 1:# Горизонтальный корабль
             for i in range(self._length):
                 position[i] = (self._x + i, self._y, self._cells[i])
-        else:
+        else:# Вертикальный корабль
             for i in range(self._length):
                 position[i] = (self._x, self._y + i, self._cells[i])
         return position
@@ -128,13 +128,13 @@ class Ship:
     def __setitem__(self, item, value):
         self._cells[item] = value
 class GamePole:
-    def __init__(self, pole_size: int) -> None:
-        self._size = pole_size
-        self._ships = []
-        self._spaced_ships = []
-        self._pole = [[0 for i in range(self._size)] for i in range(self._size)]
+    def __init__(self, pole_size: int) -> None: #Функция входных данных
+        self._size = pole_size # Размер поля.
+        self._ships = [] # Все корабли.
+        self._spaced_ships = [] #Размещённые корабли
+        self._pole = [[0 for i in range(self._size)] for i in range(self._size)] # Игровое поле.
 
-    def init(self):
+    def init(self): #Расстановка кораблей и проверка коллизии
         self._ships = [Ship(4, tp=randint(1, 2)), Ship(3, tp=randint(1, 2)), Ship(3, tp=randint(1, 2)),
                        Ship(2, tp=randint(1, 2)), Ship(2, tp=randint(1, 2)), Ship(2, tp=randint(1, 2)),
                        Ship(1, tp=randint(1, 2)), Ship(1, tp=randint(1, 2)), Ship(1, tp=randint(1, 2)),
@@ -180,11 +180,11 @@ class GamePole:
             ship.set_start_coords(x, y)
 
     def show(self):
-        self.update_pole()
+        self.update_pole()#Обновление поля
         for row in self._pole:
-            print(" ".join([str(v) for v in row]))
+            print(" ".join([str(v) for v in row])) #Вывод поля в консоль
 
-    def secret_show(self):
+    def secret_show(self):#Обнавляет поле в скрытом формате, чтобы игрок его не видел
         self.update_pole()
         for row in self._pole:
             for v in row:
@@ -194,30 +194,30 @@ class GamePole:
                     print(str(v), end=" ")
             print("\n", end="")
 
-    def get_pole(self):
+    def get_pole(self):#Возвращение поля в форме кортежа
         return tuple(tuple(i) for i in self._pole)
 
-    def make_pole(self):
+    def make_pole(self):#Обновление позиций кораблей на поле
         for ship in self._ships:
             for index, data in ship.make_position().items():
                 self._pole[data[0]][data[1]] = data[2]
 
     def move_check(self, ship, go): # Проверка возможности движения корабля
-        x, y = ship.get_start_coords()
-        if ship.tp == 1:
+        x, y = ship.get_start_coords() #Получаем кординаты кораблей
+        if ship.tp == 1: #Проверка движения корабля по горизонтали
             zone = ship.get_z(x + go, y, ship.tp, ship.length, self._size)
-            if go == 1:
+            if go == 1: #начинаем движение кораблей
                 check_length = x + go + ship.length
             else:
                 check_length = x + go - 1
-            for x_z, y_z in zone:
+            for x_z, y_z in zone: #проверяем каждую клетку вокруг корабля
                 if self._pole[y_z][x_z] != 0 and x_z == check_length:
                     return False
 
-            if x + go < 0 or x + go + ship.length > self._size:
+            if x + go < 0 or x + go + ship.length > self._size: #проверяем не выходит ли корабль за пределы поля
                 return False
 
-        elif ship.tp == 2:
+        elif ship.tp == 2: #Проверка движения корабля по вертикале
             zone = ship.get_z(x, y + go, ship.tp, ship.length, self._size)
             if go == 1:
                 check_lenght = y + go + ship.length
@@ -233,8 +233,8 @@ class GamePole:
 
     def move_ships(self) -> None: # Движение кораблей
         for ship in self._ships:
-            go = choice([-1, 1])
-            flag = self.move_check(ship, go)
+            go = choice([-1, 1]) # Случайное направление: -1 (влево/вверх) или 1 (вправо/вниз)
+            flag = self.move_check(ship, go) # Проверяем на препятствие
             if flag:
                 ship.move(go)
                 self.update_pole()
@@ -254,28 +254,28 @@ class GameService:
     def player_attack(self, x, y): # Атака игрока
         for ship in self.ii_pole.get_ships():
             if [x, y] in ship.get_self_zone(ship._x, ship._y, ship._tp, ship._length):
-                if ship._tp == 1:
+                if ship._tp == 1:#проверка поподаня по горизонтали
                     ship._cells[x - ship._x] = 2
                     print("Игрок: Попадание")
                     break
-                if ship._tp == 2:
+                if ship._tp == 2:#проверка поподаня по вертикали
                     ship._cells[y - ship._y] = 2
                     print("Игрок: Попадание")
                     break
         else:
             print("Игрок: Нет попадания")
 
-    def ii_attack(self): # Атака ИИ
+    def ii_attack(self): # Атака ИИ по рандомным кординатам
         x = randint(0, self.player_pole._size)
         y = randint(0, self.player_pole._size)
         print("Ход противника",x,y)
         for ship in self.player_pole.get_ships():
             if [x, y] in ship.get_self_zone(ship._x, ship._y, ship._tp, ship._length):
-                if ship._tp == 1:
+                if ship._tp == 1:#проверка поподаня по горизонтали
                     ship._cells[x - ship._x] = 2
                     print("ИИ: Попадание")
                     break
-                if ship._tp == 2:
+                if ship._tp == 2:#проверка поподаня по вертикали
                     ship._cells[y - ship._y] = 2
                     print("ИИ: Попадание")
                     break

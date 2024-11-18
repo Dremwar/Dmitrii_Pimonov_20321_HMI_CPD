@@ -35,17 +35,19 @@ class ProductInfoServicer(product_info_pb2_grpc.ProductInfoServicer):
 
     # В методе deleteProduct удаляем продукт из словаря productMap
     def deleteProduct(self, request, context):
-        print("deleteProduct:request", request)
-        id = request.value
-        if str(id) in self.productMap:
-            del self.productMap[str(id)]
-            response = product_info_pb2.Empty()
-            print("deleteProduct:response", response)
-            return response
-        else:
-            context.set_code(grpc.StatusCode.NOT_FOUND)
-            context.set_details("Product not found")
+        print("Received request to delete product with ID:", request.value)
+
+        product_id = str(request.value)
+        product_exists = product_id in self.productMap
+
+        if product_exists:
+            self.productMap.pop(product_id)
+            print("Product deleted successfully.")
             return product_info_pb2.Empty()
+
+        context.set_code(grpc.StatusCode.NOT_FOUND)
+        context.set_details(f"Product with ID {product_id} not found.")
+        return product_info_pb2.Empty()
 
 
 # Создаём GRPC сервер
