@@ -1,74 +1,61 @@
-from PySide6.QtCore import QUrl #импортируем библиотеки
+import sys #импортируем библиотеки
+from PySide6.QtCore import QByteArray, QUrl, QFile, QIODevice
 from PySide6.QtMultimedia import QMediaPlayer
 from PySide6.QtMultimediaWidgets import QVideoWidget
 from PySide6.QtNetwork import QTcpServer, QTcpSocket
 from PySide6.QtWidgets import QApplication, QMainWindow
-import os
-
-
-class VideoServer(QMainWindow):# класс реализует получение и воспроизведение видио
+import video_pb2
+import struct
+class VideoServer(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("PySide6 Video Server")
-
-        # Настройка виджета для видео
-        self.video_widget = QVideoWidget()
+        self.setWindowTitle("Streaming Video Server")
+        self.video_widget = QVideoWidget() # Настройка виджета для видео
         self.setCentralWidget(self.video_widget)
 
         # Настройка QMediaPlayer
         self.media_player = QMediaPlayer()
         self.media_player.setVideoOutput(self.video_widget)
 
-        # Логирование ошибок
-        self.media_player.errorOccurred.connect(self.on_error)
-        self.media_player.mediaStatusChanged.connect(self.on_media_status)
+        # Временный файл для записи видео
+        self.temp_file = QFile("streamed_video.mp4")
+        self.temp_file.open(QIODevice.WriteOnly)  # Открываем файл на запись
 
         # Настройка TCP-сервера
         self.tcp_server = QTcpServer(self)
         self.tcp_server.listen(port=12345)
         self.tcp_server.newConnection.connect(self.handle_new_connection)
 
-        self.client_socket = None
-        self.buffer = bytearray()
-
         print("Сервер запущен на порту 12345")
 
-    def handle_new_connection(self):#функция обработки подключений
-        self.client_socket = self.tcp_server.nextPendingConnection()
-        self.client_socket.readyRead.connect(self.read_data)
-        self.client_socket.disconnected.connect(self.client_socket.deleteLater)
+    def handle_new_connection(self): #функция нового подключения
+        self.client_socket = self.tcp_server.nextPendingConnection()#метод обрабатывающий подключение
+        self.client_socket.readyRead.connect(self.read_data)#Метод читающий данные от клиента
+        self.client_socket.disconnected.connect(self.client_socket.deleteLater)#метод обрабатывающий отключение клиента
         print("Клиент подключен")
+        self.media_player.setSource(QUrl.fromLocalFile("streamed_video.mp4"))# Устанавливаем источник для воспроизведения
+        self.media_player.play()  # Начинаем воспроизведение
 
-    def read_data(self):#чтение данных от клиента
+    def read_data(self):#Чтение данных от клиента
         while self.client_socket.bytesAvailable():
-            self.buffer.extend(self.client_socket.readAll().data())
+            if self.client_socket.bytesAvailable() < 4:# Если нет длины сообщения, ждем
+                return
+            length_data = self.client_socket.read(4)#Читаем длину сообщения
+            message_length = struct.unpack(">I", bytes(length_data))[0]  # Преобразуем QByteArray в bytes
+            if self.client_socket.bytesAvailable() < message_length:#Ждём доставки
+                return
+            message_data = self.client_socket.read(message_length)# Читаем сообщение
+            video_message = video_pb2.VideoData()# Преобразование сообщения Protobuf
+            video_message.ParseFromString(bytes(message_data))  # Преобразуем QByteArray в bytes
+            self.process_video_chunk(video_message)# Обработка полученного чанка
 
-        # Если передача завершена, сохраняем данные в видеофайл
-        if b'EOF' in self.buffer:
+    def process_video_chunk(self, video_message):#Обработка одного видео-чанка
+        if video_message.is_end:
             print("Передача завершена")
-            self.buffer = self.buffer.replace(b'EOF', b'')  # Удаляем маркер EOF
-            video_file = "received_video.mp4"
-            with open(video_file, "wb") as f:
-                f.write(self.buffer)
-            self.buffer.clear()
-            print(f"Видео сохранено как {video_file}")
-
-            # Проверяем размер файла
-            print(f"Размер файла: {os.path.getsize(video_file)} байт")
-
-            # Воспроизводим видео
-            self.media_player.setSource(QUrl.fromLocalFile(video_file))
-            self.media_player.play()
-
-    def on_error(self, error):#функция ощибки воспроизведения
-        print(f"Ошибка воспроизведения: {error}, {self.media_player.errorString()}")
-
-    def on_media_status(self, status):#функция воспроизведения статуса
-        print(f"Статус медиа: {status}")
-
+            self.media_player.stop()
 
 if __name__ == "__main__":
-    app = QApplication([])
+    app = QApplication(sys.argv)
     server = VideoServer()
     server.show()
-    app.exec()
+    sys.exit(app.exec())

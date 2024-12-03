@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+message VideoData {
+  bytes video_chunk = 1;  // Бинарные данные видео
+  bool is_end = 2;        // Флаг конца передачи
+}

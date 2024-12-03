@@ -1,37 +1,52 @@
-import sys #Импортируем библиотеки
+import sys# Импортируем библиотеки
+import video_pb2
+from PySide6.QtCore import QFile
 from PySide6.QtNetwork import QTcpSocket
+from PySide6.QtWidgets import QApplication
+import struct
 
-def send_video():#Функция отправки видио
-    file_path = "D:\git\Dmitrii_Pimonov_20321_HMI_CPD\CPD\qtask4_vidio\qvideoplayback.mp4"  # Укажите здесь путь к вашему видеофайлу
-    host = "localhost"
-    port = 12345
+class VideoClient:
+    def __init__(self, server_ip='127.0.0.1', server_port=12345):
+        self.server_ip = server_ip
+        self.server_port = server_port
+        self.client_socket = QTcpSocket()
+        self.client_socket.connected.connect(self.on_connected)
+        self.client_socket.connectToHost(self.server_ip, self.server_port)
 
-    socket = QTcpSocket()
-    socket.connectToHost(host, port)
+    def on_connected(self):#Функция подключение клиента к серверу
+        print(f"Подключено к серверу {self.server_ip}:{self.server_port}")
+        self.send_video('D:\git\Dmitrii_Pimonov_20321_HMI_CPD\CPD\qtask4_vidio\qvideoplayback.mp4')  # Отправляем видео, как только подключились
 
-    if not socket.waitForConnected(3000):
-        print("Не удалось подключиться к серверу")
-        return
 
-    print("Подключено к серверу")
 
-    # Отправка файла
-    try:
-        with open(file_path, "rb") as f:
-            while chunk := f.read(1024):
-                socket.write(chunk)
-                socket.waitForBytesWritten(3000)
+    def send_video(self, filename):#Функция отправки видио
+        with open(filename, 'rb') as f:
+            video_data = f.read()
 
-        # Добавляем маркер окончания передачи
-        socket.write(b'EOF')
-        socket.waitForBytesWritten(3000)
+        chunk_size = 1024  # Размер чанка
+        total_size = len(video_data)
+        print(f"Начинаю отправку видео, размер файла: {total_size} байт")
+
+        for i in range(0, total_size, chunk_size):
+            chunk = video_data[i:i + chunk_size]
+            # Создание сообщения Protobuf
+            video_message = video_pb2.VideoData()
+            video_message.video_chunk = chunk
+            video_message.is_end = (i + chunk_size >= total_size)  # Устанавливаем флаг окончания
+
+            # Сериализация данных
+            serialized_message = video_message.SerializeToString()
+            message_length = len(serialized_message)
+
+            # Отправляем длину сообщения (4 байта) + само сообщение
+            self.client_socket.write(struct.pack(">I", message_length))  # 4 байта длины
+            self.client_socket.write(serialized_message)
+            self.client_socket.flush()
+
         print("Видео отправлено")
-    except FileNotFoundError:
-        print(f"Файл {file_path} не найден")
-    except Exception as e:
-        print(f"Ошибка: {e}")
-    finally:
-        socket.close()
+
 
 if __name__ == "__main__":
-    send_video()
+    app = QApplication(sys.argv)  # Создаем объект приложения
+    client = VideoClient()
+    app.exec()  # Запуск приложения PySide6
