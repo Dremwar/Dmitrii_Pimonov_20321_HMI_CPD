@@ -9,22 +9,19 @@ import struct
 class VideoServer(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Streaming Video Server")
+        self.setWindowTitle("Streaming Video Server") #Название главного окнаы
         self.video_widget = QVideoWidget() # Настройка виджета для видео
-        self.setCentralWidget(self.video_widget)
+        self.setCentralWidget(self.video_widget)#Центральный виджет, виджет отображения
 
-        # Настройка QMediaPlayer
-        self.media_player = QMediaPlayer()
-        self.media_player.setVideoOutput(self.video_widget)
+        self.media_player = QMediaPlayer()# Настройка QMediaPlayer
+        self.media_player.setVideoOutput(self.video_widget)#метод воспроизведения видио
 
-        # Временный файл для записи видео
-        self.temp_file = QFile("streamed_video.mp4")
+        self.temp_file = QFile("streamed_video.mp4")# Временный файл для записи видео
         self.temp_file.open(QIODevice.WriteOnly)  # Открываем файл на запись
 
-        # Настройка TCP-сервера
-        self.tcp_server = QTcpServer(self)
+        self.tcp_server = QTcpServer(self)# Настройка TCP-сервера на порту 12345
         self.tcp_server.listen(port=12345)
-        self.tcp_server.newConnection.connect(self.handle_new_connection)
+        self.tcp_server.newConnection.connect(self.handle_new_connection)#Обработка новых подключений
 
         print("Сервер запущен на порту 12345")
 

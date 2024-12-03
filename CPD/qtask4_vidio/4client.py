@@ -27,26 +27,23 @@ class VideoClient:
         total_size = len(video_data)
         print(f"Начинаю отправку видео, размер файла: {total_size} байт")
 
-        for i in range(0, total_size, chunk_size):
+        for i in range(0, total_size, chunk_size):#цыкл разбития файла на чанки.
             chunk = video_data[i:i + chunk_size]
-            # Создание сообщения Protobuf
-            video_message = video_pb2.VideoData()
+            video_message = video_pb2.VideoData()# Создание сообщения Protobuf
             video_message.video_chunk = chunk
             video_message.is_end = (i + chunk_size >= total_size)  # Устанавливаем флаг окончания
 
-            # Сериализация данных
-            serialized_message = video_message.SerializeToString()
-            message_length = len(serialized_message)
+            serialized_message = video_message.SerializeToString()#Создаёт сообщение для отправки данных
+            message_length = len(serialized_message)#Определяем длину сообщения
 
-            # Отправляем длину сообщения (4 байта) + само сообщение
-            self.client_socket.write(struct.pack(">I", message_length))  # 4 байта длины
-            self.client_socket.write(serialized_message)
-            self.client_socket.flush()
+            # Отправляем длину сообщения
+            self.client_socket.write(struct.pack(">I", message_length))
+            self.client_socket.write(serialized_message)#Отправляет сообщение
+            self.client_socket.flush()#очищаем буфер
 
         print("Видео отправлено")
 
-
 if __name__ == "__main__":
-    app = QApplication(sys.argv)  # Создаем объект приложения
+    app = QApplication(sys.argv)
     client = VideoClient()
     app.exec()  # Запуск приложения PySide6

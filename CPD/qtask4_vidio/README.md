@@ -18,22 +18,19 @@ import struct
 class VideoServer(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Streaming Video Server")
+        self.setWindowTitle("Streaming Video Server") #Название главного окнаы
         self.video_widget = QVideoWidget() # Настройка виджета для видео
-        self.setCentralWidget(self.video_widget)
+        self.setCentralWidget(self.video_widget)#Центральный виджет, виджет отображения
 
-        # Настройка QMediaPlayer
-        self.media_player = QMediaPlayer()
-        self.media_player.setVideoOutput(self.video_widget)
+        self.media_player = QMediaPlayer()# Настройка QMediaPlayer
+        self.media_player.setVideoOutput(self.video_widget)#метод воспроизведения видио
 
-        # Временный файл для записи видео
-        self.temp_file = QFile("streamed_video.mp4")
+        self.temp_file = QFile("streamed_video.mp4")# Временный файл для записи видео
         self.temp_file.open(QIODevice.WriteOnly)  # Открываем файл на запись
 
-        # Настройка TCP-сервера
-        self.tcp_server = QTcpServer(self)
+        self.tcp_server = QTcpServer(self)# Настройка TCP-сервера на порту 12345
         self.tcp_server.listen(port=12345)
-        self.tcp_server.newConnection.connect(self.handle_new_connection)
+        self.tcp_server.newConnection.connect(self.handle_new_connection)#Обработка новых подключений
 
         print("Сервер запущен на порту 12345")
 
@@ -101,30 +98,26 @@ class VideoClient:
         total_size = len(video_data)
         print(f"Начинаю отправку видео, размер файла: {total_size} байт")
 
-        for i in range(0, total_size, chunk_size):
+        for i in range(0, total_size, chunk_size):#цыкл разбития файла на чанки.
             chunk = video_data[i:i + chunk_size]
-            # Создание сообщения Protobuf
-            video_message = video_pb2.VideoData()
+            video_message = video_pb2.VideoData()# Создание сообщения Protobuf
             video_message.video_chunk = chunk
             video_message.is_end = (i + chunk_size >= total_size)  # Устанавливаем флаг окончания
 
-            # Сериализация данных
-            serialized_message = video_message.SerializeToString()
-            message_length = len(serialized_message)
+            serialized_message = video_message.SerializeToString()#Создаёт сообщение для отправки данных
+            message_length = len(serialized_message)#Определяем длину сообщения
 
-            # Отправляем длину сообщения (4 байта) + само сообщение
-            self.client_socket.write(struct.pack(">I", message_length))  # 4 байта длины
-            self.client_socket.write(serialized_message)
-            self.client_socket.flush()
+            # Отправляем длину сообщения
+            self.client_socket.write(struct.pack(">I", message_length))
+            self.client_socket.write(serialized_message)#Отправляет сообщение
+            self.client_socket.flush()#очищаем буфер
 
         print("Видео отправлено")
 
-
 if __name__ == "__main__":
-    app = QApplication(sys.argv)  # Создаем объект приложения
+    app = QApplication(sys.argv)
     client = VideoClient()
     app.exec()  # Запуск приложения PySide6
-
 ```
 ![alt text](image.png)
 
