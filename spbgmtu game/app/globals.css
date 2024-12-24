@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* Общие стили */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to left, blue 10%, white 10% 90%, blue 90%); /* Добавлен градиент */
+  color: #333;
+}
+
+/* Стили для главного контейнера */
+div {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Стили для заголовка */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+/* Стили для ссылки */
+a {
+  text-decoration: none;
+  color: #3498db;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: #2980b9;
+}
+
+/* Стили для кнопки-ссылки */
+b {
+  background-color: #3498db;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+b:hover {
+  background-color: #2980b9;
+}
+
+/* Стили для баннера */
+/* Общие стили для меню */
+nav.one {
+  background-color: #2c3e50;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для списка */
+nav.one ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+/* Стили для элементов списка */
+nav.one ul li {
+  margin: 0;
+}
+
+/* Стили для ссылок */
+nav.one ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Стили для иконок */
+nav.one ul li a i {
+  margin-right: 5px;
+  font-size: 1.2rem;
+}
+
+/* Ховер-эффект для ссылок */
+nav.one ul li a:hover {
+  background-color: #34495e;
+  color: #ecf0f1;
+}
